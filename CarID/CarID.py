@@ -10,6 +10,15 @@ import datetime
 service = Service(ChromeDriverManager().install())
 driver = webdriver.Chrome(service=service)
 
+def reset_to_start():   
+    # Run the main function
+    print("\n*********Resetting to start*********\n")
+    driver.get('https://www.carid.com/')
+    # Click the search icon
+    search_icon_xpath = '/html/body/div[4]/div/header/div[1]/div/div[2]/div'
+    driver.find_element(By.XPATH, search_icon_xpath).click()
+    time.sleep(5)  # wait for the search box to activate
+
 # Function to read the input file
 def read_input_file(file_path):
     with open(file_path, 'r') as file:
@@ -41,6 +50,8 @@ def main(input_file, output_folder):
     tracker = 0
     for sku in skus:
         tracker += 1
+        if tracker % 25 == 0:
+            reset_to_start()
         print(f"\nProcessing SKU {tracker}/{len(skus)}: {sku}")
         try:
             # we split SKu by space and get the last element
@@ -78,12 +89,7 @@ def main(input_file, output_folder):
 input_file_path = 'C:/Users/ryexd/Documents/GitHub/WebScraping/CarID/input/input.txt'
 output_folder_path = 'C:/Users/ryexd/Documents/GitHub/WebScraping/CarID/output/'
 
-# Run the main function
-driver.get('https://www.carid.com/')
-# Click the search icon
-search_icon_xpath = '/html/body/div[4]/div/header/div[1]/div/div[2]/div'
-driver.find_element(By.XPATH, search_icon_xpath).click()
-time.sleep(5)  # wait for the search box to activate
+reset_to_start()
 
 main(input_file_path, output_folder_path)
 
